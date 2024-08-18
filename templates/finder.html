@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Exam finder</title>
+    <link rel="stylesheet" href="../static/finder.css">
+</head>
+    
+<body></body>
+
+<h1>Find your exams!</h1>
+<form action="/search_test" method="POST">
+    <label for="class">Class</label>
+    <input type="text" id="class" name="class" placeholder="Enter your class" required>
+
+    <label for="subject">Subject</label>
+    <input type="text" id="subject" name="subject" placeholder="Enter the test subject" required>
+
+    <button type="submit">Submit</button>
+</form>
+
+<div class="table_area"></div>
+<h1>Search Results</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Test Name</th>
+            <th>Subject</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for exam in exams %}
+        <tr>
+            <td>{{ exam[0] }}</td>
+            <td>{{ exam[1] }}</td>
+            <td>{{ exam[2] }}</td>
+            <td>{{ exam[3] }}</td>
+            <td>{{ exam[4] }}</td>
+            <td>{{ exam[5] }}</td>
+            <td id="description">{{ exam[6] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+</body>
+</html>

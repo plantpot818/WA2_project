@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Exam creator</title>
+    <link rel="stylesheet" href="../static/creator.css">
+</head>
+
+<body>
+<h1>Create Plan</h1>
+
+<form action="/submit_form" method="POST">
+    <label for="test_name">Test Name:</label>
+    <input type="text" id="test_name" name="test_name" placeholder="Enter test name">
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" placeholder="Enter a valid subject">
+
+    <label for="classes">Classes involved (Comma-separated):</label>
+    <input type="text" id="classes" name="classes" placeholder="Enter classes (eg. 25/01, 25/05)" required>
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" placeholder="Enter location">
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date">
+
+    <label for="start_time">Start Time:</label>
+    <input type="time" id="start_time" name="start_time">
+
+    <label for="end_time">End Time:</label>
+    <input type="time" id="end_time" name="end_time">
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4" placeholder="Enter a description of the exam"></textarea>
+
+    <button type="submit">Submit</button>
+
+    <h3 id="success"> {{success}} </h3>
+</form>
+
+<br>
+
+<form action="/file_upload" method="post" enctype="multipart/form-data">
+    <label for="csv_file">Upload student info (CSV file)</label>
+    <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+    <button type="submit">Upload</button>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</form>
+
+
+</body>
+</html>
