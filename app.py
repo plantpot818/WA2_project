@@ -40,7 +40,7 @@ def password_page():
         password = request.form.get('password')
         
         # Example password check (replace with your own logic)
-        if password == 'verysneakypassword123':
+        if password == '123':
             token = generate_token()
             store_token(token)
             return redirect(url_for("plan_creator", token=token))
@@ -60,7 +60,7 @@ def exam_finder():
 @app.route("/search_test", methods=['POST'])
 def search_test():
     stu_class = request.form.get('class')
-    subject = request.form.get('subject')
+    subject = (request.form.get('subject')).lower()
 
     conn = sqlite3.connect('exam.db')
     cursor = conn.cursor()
@@ -100,7 +100,7 @@ def plan_creator():
 @app.route("/submit_form", methods=['POST'])
 def submit_form():
     test_name = request.form.get('test_name')
-    subject = request.form.get('subject')
+    subject = (request.form.get('subject')).lower()
     classes = request.form.get('classes')  
     location = request.form.get('location')
     date = request.form.get('date')
