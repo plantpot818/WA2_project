@@ -5,9 +5,15 @@ body {
     text-align: center;
 }
 
+.home_button {
+    display: flex; 
+    justify-content: flex-start; 
+    max-width: fit-content;
+}
+
 form {
     max-width: 600px;
-    margin: 0 auto;
+    margin: auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;

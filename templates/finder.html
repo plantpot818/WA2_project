@@ -6,15 +6,16 @@
     <link rel="stylesheet" href="../static/finder.css">
 </head>
     
-<body></body>
+<body>
+<button class="home_button" onclick="location.href='/'">Go to Home</button>
 
 <h1>Find your exams!</h1>
 <form action="/search_test" method="POST">
     <label for="class">Class</label>
-    <input type="text" id="class" name="class" placeholder="Enter your class" required>
+    <input type="text" id="class" name="class" placeholder="Enter your class">
 
     <label for="subject">Subject</label>
-    <input type="text" id="subject" name="subject" placeholder="Enter the test subject" required>
+    <input type="text" id="subject" name="subject" placeholder="Enter the test subject">
 
     <button type="submit">Submit</button>
 </form>

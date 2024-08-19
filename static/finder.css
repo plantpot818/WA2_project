@@ -5,6 +5,12 @@ body {
     text-align: center;
 }
 
+.home_button {
+    display: flex; 
+    justify-content: flex-start; 
+    max-width: fit-content;
+}
+
 form {
     max-width: 400px;
     margin: 50px auto;

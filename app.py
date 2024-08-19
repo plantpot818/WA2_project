@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
-import csv
 import os
 import uuid
 
@@ -29,7 +28,7 @@ def generate_access_token():
 
 def validate_token(token):
     if token in tokens and tokens[token]:
-        # Invalidate the token
+        # invalidate the token
         tokens[token] = False
         return True
     return False
@@ -39,7 +38,7 @@ def password_page():
     if request.method == 'POST':
         password = request.form.get('password')
         
-        # Example password check (replace with your own logic)
+        # password thing here
         if password == '123':
             token = generate_token()
             store_token(token)
@@ -71,15 +70,17 @@ def search_test():
     WHERE 1=1
     '''
     
-    # Easy way to add paramater values and sub them into the placeholders at the end
+    # easy way to add paramater values and sub them into the placeholders at the end
+    # prevents the sql injection(illegal stuff) things from happening since i'm not using a f string anymore
     params = []
     
     if stu_class:
-        query += " AND classes = ?"
-        params.append(stu_class)
+        query += " AND classes LIKE ?"
+        params.append(f"%{stu_class}%")
     
+    # so that subject is not case sensitive
     if subject:
-        query += " AND subject = ?"
+        query += "AND lower(subject) = ?"
         params.append(subject)
 
     cursor.execute(query, params)
@@ -100,8 +101,8 @@ def plan_creator():
 @app.route("/submit_form", methods=['POST'])
 def submit_form():
     test_name = request.form.get('test_name')
-    subject = (request.form.get('subject')).lower()
-    classes = request.form.get('classes')  
+    subject = request.form.get('subject')
+    classes = request.form.get('classes')
     location = request.form.get('location')
     date = request.form.get('date')
     start_time = request.form.get('start_time')
@@ -112,6 +113,7 @@ def submit_form():
         conn = sqlite3.connect('exam.db')
         cursor = conn.cursor()
 
+        # avoid using f string to prevent illegal sql injection which can cause very very bad stuff
         cursor.execute('''
             INSERT INTO exams (test_name, classes, subject, location, date, start_time, end_time, description)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?);
@@ -128,54 +130,30 @@ def submit_form():
 
 @app.route('/file_upload', methods=['POST'])
 def file_upload():
-    if 'csv_file' not in request.files:
+    if 'image_file' not in request.files:
         flash('No file part', category='error')
         return redirect(url_for("plan_creator"))
 
-    file = request.files['csv_file']
+    file = request.files['image_file']
 
     if file.filename == '':
         flash('No selected file', category='error')
         return redirect(url_for("plan_creator"))
 
-    if file and file.filename.endswith('.csv'):
+    # Image file types
+    if file and (file.filename.endswith('.jpg') or 
+                file.filename.endswith('.jpeg') or 
+                file.filename.endswith('.png') or 
+                file.filename.endswith('.gif')):
         filename = file.filename
+
+        # uploading it into the uploads folder
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
-        flash('File uploaded successfully', category='success')
-
-        conn = sqlite3.connect('exam.db')
-        cursor = conn.cursor()
-        try:
-            # Open the file for reading
-            with open(filepath, 'r') as csv_file:
-                reader = csv.DictReader(csv_file)
-                for row in reader:
-                    stu_index = row['Stu_index']
-                    stu_name = row['Stu_Name']
-                    class_ = row['Class']
-                    subject = row['Subject']
-                    
-                    # Inserting into students table
-                    cursor.execute('''
-                    INSERT INTO students (stu_index, stu_name, class, subject)
-                    VALUES (?, ?, ?, ?)
-                    ''', (stu_index, stu_name, class_, subject))
-                
-            # Commit the transaction after processing all rows
-            conn.commit()
-
-        except sqlite3.Error as e:
-            print(f"Database error: {e}")
-            flash('An error occurred while processing the file.', category='error')
-        except Exception as e:
-            print(f"General error: {e}")
-            flash('An unexpected error occurred.', category='error')
-        finally:
-            conn.close()
-
+        flash('Image uploaded successfully', category='success')
     else:
-        flash('Invalid file type. Please upload a CSV file.', category='error')
+        # handling other files
+        flash('Invalid file type. Please upload an image file (JPG, JPEG, PNG, or GIF).', category='error')
 
     return redirect(url_for("plan_creator"))
 
