@@ -11,7 +11,10 @@
 
 <h1>Create Plan</h1>
 
-<form action="/submit_form" method="POST">
+<form action="/submit_form" method="POST" enctype="multipart/form-data">
+    <!--sending the token over as well-->
+    <input type="hidden" name="token" value="{{ token }}">
+
     <label for="test_name">Test Name:</label>
     <input type="text" id="test_name" name="test_name" placeholder="Enter test name">
 
@@ -36,17 +39,10 @@
     <label for="description">Description:</label>
     <textarea id="description" name="description" rows="4" placeholder="Enter a description of the exam"></textarea>
 
-    <button type="submit">Submit</button>
-
-    <h3 id="success"> {{success}} </h3>
-</form>
-
-<br>
-
-<form action="/file_upload" method="post" enctype="multipart/form-data">
     <label for="image_file">Upload Image:</label>
     <input type="file" name="image_file" id="image_file" accept="image/*">
-    <button type="submit">Upload</button>
+
+    <button type="submit">Submit</button>
 
     <!--sending error messages back with flash imported from flask-->
     {% with messages = get_flashed_messages(with_categories=True) %}
@@ -58,8 +54,9 @@
             </ul>
         {% endif %}
     {% endwith %}
-</form>
 
+    <h3 id="success"> {{success}} </h3>
+</form>
 
 </body>
 </html>

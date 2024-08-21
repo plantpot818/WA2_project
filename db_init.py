@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS exams (
     start_time TEXT, 
     end_time TEXT,
     description TEXT,
+    image TEXT
 );
 ''')
 

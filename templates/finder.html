@@ -44,7 +44,8 @@
             <td>{{ exam[3] }}</td>
             <td>{{ exam[4] }}</td>
             <td>{{ exam[5] }}</td>
-            <td id="description">{{ exam[6] }}</td>
+            <!--target blank attribute makes the image open in a new table-->
+            <td id="description">{{ exam[6] }} &nbsp; <a href="{{ exam[7] }}" target="_blank">[Image attached]</a> </td>
         </tr>
         {% endfor %}
     </tbody>
