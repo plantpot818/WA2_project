@@ -2,10 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import sqlite3
 import os
 import uuid
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = "amongs"
+
+# delete any exams tht are already over
+today = date.today().strftime('%Y-%m-%d')  
+conn = sqlite3.connect('exams.db')
+cursor = conn.cursor()
+cursor.execute("DELETE FROM exams WHERE date < ?", (today,))
+conn.commit()
+conn.close()
 
 # upload folder path setup
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
