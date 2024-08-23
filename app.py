@@ -9,7 +9,7 @@ app.secret_key = "amongs"
 
 # delete any exams tht are already over
 today = date.today().strftime('%Y-%m-%d')  
-conn = sqlite3.connect('exams.db')
+conn = sqlite3.connect('exam.db')
 cursor = conn.cursor()
 cursor.execute("DELETE FROM exams WHERE date < ?", (today,))
 conn.commit()
